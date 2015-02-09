@@ -3,22 +3,41 @@
 
 #include <utility>
 
-struct PointBase {
-  PointBase() : x(0), y(0), z(0) {}
-  PointBase(float x, float y, float z) : x(x), y(y), z(z) {}
-  float x, y, z;
+#include "Constants.h"
+
+class Point {
+ public:
+  Point() : x_(0), y_(0), z_(0) {}
+  Point(double x, double y, double z);
+
+
+  double x() const { return x_; }
+  double y() const { return y_; }
+  double z() const { return z_; }
+
+  Point& operator+=(Point rhs);
+  Point& operator-=(Point rhs);
+  Point& operator*=(double n);
+
+  friend bool operator==(const Point& lhs, const Point& rhs);
+  friend bool operator!=(const Point& lhs, const Point& rhs);
+  friend Point operator*(Point lhs, double n);
+
+ private:
+  void trim();
+  double x_, y_, z_;
 };
 
-struct Point : PointBase {
-  template<typename... Args> Point(Args&&... args) : 
-    PointBase(std::forward<Args>(args)...) {}
-  bool is_origin() const { return !x || !y || !z; }
-};
+template<typename T_>
+Point operator+(Point lhs, const T_& rhs) {
+  return lhs += rhs;
+}
 
-struct Vector : PointBase {
-  template<typename... Args> Vector(Args&&... args) : 
-    PointBase(std::forward<Args>(args)...) {}
-  bool is_valid() const { return x || y || z; }
-};
+template<typename T_>
+Point operator-(Point lhs, const T_& rhs) {
+  return lhs -= rhs;
+}
+
+typedef Point Vector;
 
 #endif // POINT_H

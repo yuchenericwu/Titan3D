@@ -8,81 +8,87 @@
 
 #include "Facet.h"
 #include "Point.h"
+#include "Units.h"
 
 class STLParser {
  public:
-  static std::unique_ptr<STLParser> make_STLParser(const std::string& filename);
+  static std::unique_ptr<STLParser> make_STLParser(
+      const std::string& filename, Units units);
   virtual Facet read_facet() = 0;
  protected:
-  STLParser(std::ifstream&& fs) : fs(std::move(fs)) {}
-  std::ifstream fs;
+  STLParser(std::ifstream&& fs, Units units) :
+    fs_(std::move(fs)), units_(units) {}
+  std::ifstream fs_;
+  const Units units_;
 };
 
 class ASCIISTLParser : public STLParser {
  public:
-  ASCIISTLParser(std::ifstream&& fs, const std::string& name) :
-    STLParser(std::move(fs)),
-    name(name) {}
+  ASCIISTLParser(std::ifstream&& fs, Units units) :
+    STLParser(std::move(fs), units) {}
 
   virtual Facet read_facet() final {
     std::string facet, normal, outer, loop, vertex, endloop, endfacet;
-    Vector n;
-    Point v[3];
-    fs >> facet >> normal >> n.x >> n.y >> n.z >> outer >> loop;
+    float x, y, z;
+    fs_ >> facet >> normal >> x >> y >> z >> outer >> loop;
     if (facet != "facet" || normal != "normal" ||
         outer != "outer" || loop != "loop")
       return Facet();
+    Vector n(x, y, z);
 
+    Point v[3];
     for (int ii = 0; ii < 3; ++ii) {
-      fs >> vertex >> v[ii].x >> v[ii].y >> v[ii].z;
+      fs_ >> vertex >> x >> y >> z;
       if (vertex != "vertex")
         return Facet();
+      v[ii] = Point(x, y, z);
     }
 
-    fs >> endloop >> endfacet;
+    fs_ >> endloop >> endfacet;
     if (endloop != "endloop" || endfacet != "endfacet")
       return Facet();
 
-    return Facet(n, v);
+    return Facet(n, v, units_);
   }
- private:
-  const std::string name;
 };
 
 class BinarySTLParser : public STLParser {
  public:
-  BinarySTLParser(std::ifstream&& fs, const int length) :
-    STLParser(std::move(fs)), length(length) {}
+  BinarySTLParser(std::ifstream&& fs, Units units, const int length) :
+    STLParser(std::move(fs), units), length_(length) {}
+
   virtual Facet read_facet() final {
-    if (fs.tellg() > length - 50)
+    if (fs_.tellg() > length_ - 50)
       return Facet();
     char buffer[3][4];
-    Vector n;
-    Point v[3];
+    float x, y, z;
 
     for (int ii = 0; ii < 3; ++ii)
-      fs.read(buffer[ii], 4);
-    n.x = *reinterpret_cast<float*>(buffer[0]);
-    n.y = *reinterpret_cast<float*>(buffer[1]);
-    n.z = *reinterpret_cast<float*>(buffer[2]);
+      fs_.read(buffer[ii], 4);
+    x = *reinterpret_cast<float*>(buffer[0]);
+    y = *reinterpret_cast<float*>(buffer[1]);
+    z = *reinterpret_cast<float*>(buffer[2]);
+    Vector n(x, y, z);
     
+    Point v[3];
     for (int ii = 0; ii < 3; ++ii) {
       for (int jj = 0; jj < 3; ++jj)
-        fs.read(buffer[jj], 4);
-      v[ii].x = *reinterpret_cast<float*>(buffer[0]);
-      v[ii].y = *reinterpret_cast<float*>(buffer[1]);
-      v[ii].z = *reinterpret_cast<float*>(buffer[2]);
+        fs_.read(buffer[jj], 4);
+      x = *reinterpret_cast<float*>(buffer[0]);
+      y = *reinterpret_cast<float*>(buffer[1]);
+      z = *reinterpret_cast<float*>(buffer[2]);
+      v[ii] = Point(x, y, z);
     }
-    fs.read(buffer[0], 2);
+    fs_.read(buffer[0], 2);
 
-    return Facet(n, v);
+    return Facet(n, v, units_);
   }
  private:
-  const int length;
+  const int length_;
 };
 
 std::unique_ptr<STLParser> STLParser::make_STLParser(
-    const std::string& filename) {
+    const std::string& filename, Units units) {
   // Try opening file in ASCII format.
   std::ifstream fs;
   fs.open(filename);
@@ -93,7 +99,7 @@ std::unique_ptr<STLParser> STLParser::make_STLParser(
   fs >> solid >> name;
   if (solid == "solid")
     return std::unique_ptr<ASCIISTLParser>(new ASCIISTLParser(
-          std::move(fs), name));
+          std::move(fs), units));
 
   // Try opening file in binary format.
   fs.close();
@@ -110,7 +116,7 @@ std::unique_ptr<STLParser> STLParser::make_STLParser(
   if (num_triangles * 50 != length - 84)
     return nullptr;
   return std::unique_ptr<BinarySTLParser>(new BinarySTLParser(
-        std::move(fs), length));
+        std::move(fs), units, length));
 }
 
 #endif // STL_PARSER_H

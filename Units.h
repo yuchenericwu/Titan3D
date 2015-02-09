@@ -1,11 +1,9 @@
 #ifndef UNITS_H
 #define UNITS_H
 
-namespace Units {
-
-struct MM {};
-struct IN {};
-
-} // namespace Units
+enum class Units {
+  MM,
+  IN
+};
 
 #endif // UNITS_H

@@ -5,54 +5,72 @@
 #include <ostream>
 #include <vector>
 
+#include "Constants.h"
 #include "Point.h"
+#include "Units.h"
 
 class Facet {
  public:
-  Facet() : normal(), vertices{} {}
-  Facet(Vector n, Point v[3]) : normal(n), vertices{v[0], v[1], v[2]} {}
+  Facet() : normal_(), vertices_{}, valid_(false) {}
+  Facet(const Vector& n, const Point v[3], Units units) :
+    normal_(n), vertices_{v[0], v[1], v[2]}, valid_(true) {
+    if (units == Units::IN) {
+      normal_ *= Constants::IN_TO_MM;;
+      vertices_[0] *= Constants::IN_TO_MM;
+      vertices_[1] *= Constants::IN_TO_MM;
+      vertices_[2] *= Constants::IN_TO_MM;
+    }
+  }
+
+  const Vector normal() const {
+    return normal_;
+  }
+
+  const Point* vertices() const {
+    return vertices_;
+  }
 
   bool is_valid() const {
-    return normal.is_valid() || !vertices[0].is_origin() ||
-      !vertices[1].is_origin() || !vertices[2].is_origin();
+    return valid_;
   }
 
-  float get_x_min() const {
-    return std::min({vertices[0].x, vertices[1].x, vertices[2].x});
+  double get_x_min() const {
+    return std::min({vertices_[0].x(), vertices_[1].x(), vertices_[2].x()});
   }
 
-  float get_x_max() const {
-    return std::max({vertices[0].x, vertices[1].x, vertices[2].x});
+  double get_x_max() const {
+    return std::max({vertices_[0].x(), vertices_[1].x(), vertices_[2].x()});
   }
 
-  float get_y_min() const {
-    return std::min({vertices[0].y, vertices[1].y, vertices[2].y});
+  double get_y_min() const {
+    return std::min({vertices_[0].y(), vertices_[1].y(), vertices_[2].y()});
   }
 
-  float get_y_max() const {
-    return std::max({vertices[0].y, vertices[1].y, vertices[2].y});
+  double get_y_max() const {
+    return std::max({vertices_[0].y(), vertices_[1].y(), vertices_[2].y()});
   }
 
-  float get_z_min() const {
-    return std::min({vertices[0].z, vertices[1].z, vertices[2].z});
+  double get_z_min() const {
+    return std::min({vertices_[0].z(), vertices_[1].z(), vertices_[2].z()});
   }
 
-  float get_z_max() const {
-    return std::max({vertices[0].z, vertices[1].z, vertices[2].z});
+  double get_z_max() const {
+    return std::max({vertices_[0].z(), vertices_[1].z(), vertices_[2].z()});
   }
 
   friend std::ostream& operator<<(std::ostream& out, const Facet& facet);
  private:
-  Vector normal;
-  Point vertices[3];
+  Vector normal_;
+  Point vertices_[3];
+  const bool valid_;
 };
 
 std::ostream& operator<<(std::ostream& out, const Facet& facet) {
-  out << "Normal: " << facet.normal.x << ", " << facet.normal.y << ", "
-    << facet.normal.z << "\n";
+  out << "normal_: " << facet.normal_.x() << ", " << facet.normal_.y() << ", "
+    << facet.normal_.z() << "\n";
   for (int ii = 0; ii < 3; ++ii)
-    out << "Vertex " << ii << ": " << facet.vertices[ii].x << ", "
-      << facet.vertices[ii].y << ", " << facet.vertices[ii].z << "\n";
+    out << "Vertex " << ii << ": " << facet.vertices_[ii].x() << ", "
+      << facet.vertices_[ii].y() << ", " << facet.vertices_[ii].z() << "\n";
   return out;
 }
 
