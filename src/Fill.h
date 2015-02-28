@@ -15,4 +15,6 @@ enum class FillState : char {
   FILL_END
 };
 
+Fill operator&&(Fill lhs, Fill rhs);
+
 #endif // FILL_H

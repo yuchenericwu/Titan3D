@@ -4,13 +4,13 @@
 #include <utility>
 
 #include "Facet.h"
-#include "Part.h"
 #include "STLParser.h"
+#include "STLWriter.h"
 #include "Units.h"
 
 int main(int argc, char* argv[]) {
-  if (argc != 2) {
-    std::cout << "Missing file argument.\n";
+  if (argc != 3) {
+    std::cout << "Missing file arguments.\n";
     return -1;
   }
 
@@ -29,13 +29,8 @@ int main(int argc, char* argv[]) {
     facets.push_back(std::move(facet));
   }
 
-  std::unique_ptr<Part> part = Part::make_Part(facets);
-  if (!part) {
-    std::cout << "Part parsing failed.\n";
-    return -1;
-  }
-  std::ofstream fout("part_matrix.txt");
-  fout << *part;
+  std::ofstream out_file(argv[2]);
+  write_ascii_stl(out_file, facets);
 
   return 0;
 }

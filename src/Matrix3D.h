@@ -26,6 +26,10 @@ class Matrix3D {
   typename std::vector<T_>::const_iterator end() const {
     return matrix_.end();
   }
+
+  const size_t size_x() const { return size_x_; }
+  const size_t size_y() const { return size_y_; }
+  const size_t size_z() const { return size_z_; }
  private:
   std::vector<T_> matrix_;
   const size_t size_x_, size_y_, size_z_;
