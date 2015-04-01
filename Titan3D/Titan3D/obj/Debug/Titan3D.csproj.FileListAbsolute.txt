@@ -1,0 +1,12 @@
+E:\Dropbox\Work\School\FYDP\Software\Titan3D\Titan3D\bin\Debug\Titan3D.exe.config
+E:\Dropbox\Work\School\FYDP\Software\Titan3D\Titan3D\bin\Debug\Titan3D.exe
+E:\Dropbox\Work\School\FYDP\Software\Titan3D\Titan3D\bin\Debug\Titan3D.pdb
+E:\Dropbox\Work\School\FYDP\Software\Titan3D\Titan3D\bin\Debug\CppCliDll.dll
+E:\Dropbox\Work\School\FYDP\Software\Titan3D\Titan3D\bin\Debug\CppCliDll.pdb
+E:\Dropbox\Work\School\FYDP\Software\Titan3D\Titan3D\obj\Debug\Titan3D.csprojResolveAssemblyReference.cache
+E:\Dropbox\Work\School\FYDP\Software\Titan3D\Titan3D\obj\Debug\Titan3D.ImportForm.resources
+E:\Dropbox\Work\School\FYDP\Software\Titan3D\Titan3D\obj\Debug\Titan3D.Properties.Resources.resources
+E:\Dropbox\Work\School\FYDP\Software\Titan3D\Titan3D\obj\Debug\Titan3D.csproj.GenerateResource.Cache
+E:\Dropbox\Work\School\FYDP\Software\Titan3D\Titan3D\obj\Debug\Titan3D.exe
+E:\Dropbox\Work\School\FYDP\Software\Titan3D\Titan3D\obj\Debug\Titan3D.pdb
+E:\Dropbox\Work\School\FYDP\Software\Titan3D\Titan3D\bin\Debug\titan3d.ico

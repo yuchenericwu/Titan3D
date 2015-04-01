@@ -1,0 +1,42 @@
+ImageRuntimeVersion: v4.0.30319
+Assembly CppCliDll, Version=0.0.*, Culture=Invariant Language (Invariant Country): 
+	hash=SHA1, flags=PublicKey
+Assembly mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Class CppCliDll.CppCliMatrix3D: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(CppCliDll.CppCliMatrix3D): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+    Void .ctor(UInt32, UInt32, UInt32): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Methods:
+    data(): PrivateScope, Public, HideBySig
+    raw_data(): PrivateScope, Public, HideBySig
+    size_x(): PrivateScope, Public, HideBySig
+    size_y(): PrivateScope, Public, HideBySig
+    size_z(): PrivateScope, Public, HideBySig
+Class CppCliDll.AllocateMatrixDelegate: AutoLayout, AnsiClass, Class, Public, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(UInt32, UInt32, UInt32): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(UInt32, UInt32, UInt32, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class CppCliDll.UpdateProgressDelegate: AutoLayout, AnsiClass, Class, Public, Sealed, BeforeFieldInit
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    Invoke(Double, Int32): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    BeginInvoke(Double, Int32, AsyncCallback, Object): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+    EndInvoke(IAsyncResult): PrivateScope, Public, Final, Virtual, VtableLayoutMask
+Class CppCliDll.CppCliPart: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(System.String, Double, CppCliDll.UpdateProgressDelegate): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Methods:
+    matrix(): PrivateScope, Public, HideBySig
+Struct CppCliDll.CppCliFill: AutoLayout, AnsiClass, Class, Public, Sealed, BeforeFieldInit
+  :System.Enum
+  Fields:
+    SByte value__ IsSignUnspecifiedByte : Public, SpecialName, RTSpecialName
+    CppCliDll.CppCliFill EMPTY = 0 : Public, Static, Literal, HasDefault
+    CppCliDll.CppCliFill SOLID = 1 : Public, Static, Literal, HasDefault
+    CppCliDll.CppCliFill OUTER_EDGE = 2 : Public, Static, Literal, HasDefault
+    CppCliDll.CppCliFill INNER_EDGE = 3 : Public, Static, Literal, HasDefault
