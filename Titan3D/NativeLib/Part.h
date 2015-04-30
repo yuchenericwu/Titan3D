@@ -16,13 +16,14 @@ class Part {
   static std::unique_ptr<Part> make_Part(
       const std::string& filename, double scaling,
       Callback::AllocateMatrix matrix_cb, Callback::UpdateProgress progress_cb);
+  const Matrix3D<Fill, true>& matrix() const { return matrix_; }
+
+ private:
   static std::unique_ptr<Part> make_shell_Part(
       const std::vector<Facet>& facets, Callback::AllocateMatrix matrix_cb,
       Callback::UpdateProgress progress_cb);
   void fill_Part(Callback::UpdateProgress progress_cb);
-  const Matrix3D<Fill, true>& matrix() const { return matrix_; }
 
- private:
   Part(Matrix3D<Fill, true>&& matrix, Vector&& origin) :
       matrix_(std::move(matrix)),
       origin_(std::move(origin)) {}
